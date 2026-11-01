@@ -1,28 +1,42 @@
-# DSO202 – Assignment 01 & 02
+# DSO202 Assignments 01, 02 & 03: Task Tracker on Kubernetes
 
-Task Tracker (frontend + backend + PostgreSQL) deployed to a local `kind` cluster.
+Dechen Wangdra Sherpa (02230281), College of Science and Technology, Royal University of Bhutan
+Module: DSO202 Scaling, Orchestration, Monitoring & Observability
+
+A three-tier Task Tracker (frontend, backend, PostgreSQL) deployed to a local kind cluster. Each assignment builds on the one before it.
 
 ## Reports
 
-| Assignment | Report |
-|---|---|
-| 01 | [Reports/Assignment-01.md](Reports/Assignment-01.md) |
-| 02 | [Reports/Assignment-02.md](Reports/Assignment-02.md) |
+| # | Topic | Report |
+|---|---|---|
+| 01 | Three-tier deployment with plain manifests | [Reports/Assignment-01.md](Reports/Assignment-01.md) |
+| 02 | Unit 2: StatefulSet, RBAC, CRD, Ingress | [Reports/Assignment-02.md](Reports/Assignment-02.md) |
+| 03 | Kustomize and Helm packaging | [Reports/Assignment-03.md](Reports/Assignment-03.md) |
 
-## Repository layout
+## Layout
 
 ```
-backend/ db/ frontend/        application source and Dockerfiles
-k8s/                          Kubernetes manifests
-  00-namespace.yaml ... 03-secret.yaml
-  database/ backend/ frontend/
-evidence/screenshots/
-  assignment01/  assignment02/
-Reports/                      reports in markdown
-docker-compose.yml
+.
+├── README.md
+├── docker-compose.yml
+├── backend/                         Backend source and Dockerfile
+├── db/                              Database image and seed data
+├── frontend/                        Frontend source and Dockerfile
+├── k8s/                             Assignment 01 manifests
+│   ├── assignment02/                Assignment 02 manifests
+│   └── assignment03/                Assignment 03
+│       ├── kustomize/               base/ and overlays/ (dev, prod)
+│       └── helm/                    task-tracker chart and environments/ values
+├── Reports/                         Assignment-01.md, Assignment-02.md, Assignment-03.md
+└── evidence/screenshots/
+    ├── assignment01/
+    ├── assignment02/
+    └── assignment03/
 ```
 
-## Images (linux/amd64)
+## Images
+
+The images are public on Docker Hub (amd64):
 
 - `dwangshers/dso202-amd64-db:1.0`
 - `dwangshers/dso202-amd64-backend:1.0`
@@ -30,16 +44,12 @@ docker-compose.yml
 
 ## Run Assignment 01
 
-Needs the `dso202` kind cluster from Practical 1 (port 30080 mapped).
+Create the kind cluster and apply the manifests in `k8s/` in order. The full steps are in the "Reproducing" section of [Reports/Assignment-01.md](Reports/Assignment-01.md).
 
-```bash
-kubectl apply -f k8s/00-namespace.yaml
-kubectl apply -f k8s/01-quota-and-limits.yaml
-kubectl apply -f k8s/02-configmap.yaml -f k8s/03-secret.yaml
-kubectl apply -f k8s/database/
-kubectl apply -f k8s/backend/
-kubectl apply -f k8s/frontend/
-kubectl get all -n dso202-assignment-01
-```
+## Run Assignment 02
 
-Open http://localhost:30080.
+Apply the manifests in `k8s/assignment02/` on top of Assignment 01. The commands are in section 5 of [Reports/Assignment-02.md](Reports/Assignment-02.md).
+
+## Run Assignment 03
+
+Render, apply and test the Kustomize overlays and the Helm chart in `k8s/assignment03/`. The commands are in section 6 of [Reports/Assignment-03.md](Reports/Assignment-03.md).
